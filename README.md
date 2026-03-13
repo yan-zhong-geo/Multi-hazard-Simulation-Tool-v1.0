@@ -26,9 +26,9 @@ All three AOI inputs are optional — the tool runs whichever hazards are provid
 | Parameter | Type | Required | Default | Description |
 |-----------|------|----------|---------|-------------|
 | DEM | Raster | Yes | — | Digital Elevation Model. |
-| RIA Prone Raster | Raster | Optional | — | Raster mask of RIA source areas (NoData = source). |
-| GLOF Lakes Raster | Raster | Optional | — | Raster mask of glacial lakes (NoData = lake). |
-| Landslide Prone Raster | Raster | Optional | — | Raster mask of landslide source areas (NoData = source). |
+| RIA AOI | Raster | Optional | — | Raster mask of RIA source areas. |
+| GLOF AOI | Raster | Optional | — | Raster mask of glacial lakes. |
+| LS AOI | Raster | Optional | — | Raster mask of landslide source areas. |
 | Output Folder | Folder | Yes | — | Directory to save output rasters and temporary files. |
 | Tana RIA | Float | Optional | 0.10 | Fahrböschung tangent for RIA runout stopping criterion. |
 | Tana GLOF | Float | Optional | 0.05 | Fahrböschung tangent for GLOF runout stopping criterion. |
