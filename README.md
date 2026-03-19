@@ -52,7 +52,7 @@ YANSIM is currently available in **three different implementations**, designed f
 |---------|----------|----------|--------|
 | ArcGIS Toolbox | ArcGIS Pro · Windows | Small areas · GIS users | Released |
 | Google Colab | Browser · Google Drive | Large areas · Python users | Released |
-| YANSIM GUI | Windows standalone | Non-technical users | Under development |
+| YANSIM Desktop | Windows standalone | Non-technical users | Under development |
  
 ### 2.1 ArcGIS Toolbox Version
  
