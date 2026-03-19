@@ -7,119 +7,90 @@
 **Coding language:** Python  
 
 ---
-
 ## Overview
-
+ 
 **YANSIM v1.0** is a multi-hazard simulation framework designed for automated runout modelling and exposure assessment in high mountain regions. It integrates three major hazard types:
-
+ 
 - Rock-Ice Avalanches (RIA)
 - Glacial Lake Outburst Floods (GLOF)
 - Landslides (LS)
-
+ 
 ### Path Model
-
+ 
 Each hazard is simulated using a unified **D8 + BFS path model**. For each seed pixel (or lake outlet), the model walks downstream along the D8 flow direction, which controls the cumulative path length and slope-based termination. At each D8 node, a breadth-first search (BFS) spreads laterally to the steepest downslope neighbours, inheriting the node's path length. This design ensures that slope termination and EI accumulation are always based on true flow-path distance rather than straight-line distance, allowing the model to correctly navigate flat terrain, glaciers, and valley floors without premature path truncation.
-
+ 
 ### Hazard Models
-
+ 
 The three hazards share the same routing framework but differ in their seed definition and EI accumulation:
-
+ 
 #### Rock-Ice Avalanche (RIA)
 Each AOI pixel is a seed. EI equals the number of upstream source pixels whose path reaches a given location (hit count). Small AOI patches below a minimum size threshold are removed before simulation.
-
+ 
 #### Glacial Lake Outburst Flood (GLOF)
 Each glacial lake is a seed. The outlet pixel (lowest elevation within the lake mask) is used as the starting point, with the lake's minimum elevation as the slope reference. EI decays exponentially with flow-path distance, weighted by lake area:
-
+ 
 ```math
 EI = lake\_area \times \exp(-k \times path\_length)
 ```
-
+ 
 Each lake's contribution is computed independently and summed across all lakes.
-
+ 
 #### Landslide (LS)
 Same hit-count approach as RIA, with additional AOI pre-processing: small patches are removed, and pixels overlapping the RIA AOI are excluded to avoid double-counting.
-
+ 
 ### Output
-
+ 
 The resulting Exposure Index (EI) layers are normalized to a 0–1 scale and can be combined into a composite Multi-Hazard EI. The tool is flexible: users can run individual hazards or combine multiple hazards depending on data availability.
-
+ 
 ---
-
+ 
 ## Available Versions
-
+ 
 YANSIM is currently available in **three different implementations**, designed for users with different technical backgrounds and computational needs:
-
-### 1. ArcGIS Toolbox Version (Current Release)
-
-- **Platform:** ArcGIS (ArcGIS Pro recommended)  
-- **File:** `YANSIM v1.0 Toolbox.atbx`  
-- **Operating System:** Windows  
-
-**Best suited for:**
-
-- Small study areas (e.g. watershed scale)  
-- Users familiar with ArcGIS, especially ArcGIS Pro  
-- GIS-based workflows  
-
-This version provides a GUI-based solution fully integrated within the ArcGIS environment.
-
----
-
-### 2. Google Colab Version (Recommended for Large-Scale Analysis)
-
-- **Platform:** Google Colab (Python Notebook)  
-- **Requirements:** Google account + Google Drive  
-
-**Best suited for:**
-
-- Large study areas (e.g. basin to regional scale)  
-- Users with basic Python / notebook experience  
-- Computationally intensive simulations  
-
-**Key advantages:**
-
-- Runs on Google cloud infrastructure  
-- Independent of local computer performance  
-- No installation required  
-- Scalable computing (premium upgrade available if needed)  
-- Results can be visualized interactively using **folium**, overlaid on Google Satellite basemaps  
-
----
-
-### 3. Standalone Windows Software (YANSIM GUI) *(Under Development)*
-
-- **Platform:** Windows (standalone application)  
-- **License:** Free and open-source  
-
-**Best suited for:**
-
-- Users without an ArcGIS license  
-- Users who prefer not to use Google services  
-- Non-technical users  
-
-**Key features:**
-
-- User-friendly graphical interface  
-- No coding or GIS software required  
-- Faster and more efficient than the ArcGIS-based version  
-- Fully local execution  
-
+ 
+| Version | Platform | Best for | Status |
+|---------|----------|----------|--------|
+| ArcGIS Toolbox | ArcGIS Pro · Windows | Small areas · GIS users | Released |
+| Google Colab | Browser · Google Drive | Large areas · Python users | Released |
+| YANSIM GUI | Windows standalone | Non-technical users | Under development |
+ 
+### 1. ArcGIS Toolbox Version
+ 
+- **File:** `YANSIM v1.0 Toolbox.atbx`
+- **Requirements:** ArcGIS Pro + Spatial Analyst extension + `scipy`
+ 
+Best suited for small study areas (e.g. watershed scale) and users familiar with ArcGIS-based GIS workflows.
+ 
+### 2. Google Colab Version
+ 
+- **File:** `YANSIM v1.0.ipynb`
+- **Requirements:** Google account + Google Drive
+ 
+Best suited for large study areas (basin to regional scale) and computationally intensive simulations. Runs on Google cloud infrastructure — independent of local computer performance. Results can be **visualized** interactively on Google Satellite basemaps via `folium`.
+ 
+### 3. YANSIM Desktop *(Under Development)*
+ 
+- **Platform:** Windows standalone application
+- **License:** Free and open-source
+ 
+User-friendly Graphical User Interface (GUI) with no coding or GIS software required, faster than the ArcGIS version, fully local execution.
+ 
 > ⚠️ This version is currently under development.
-
+ 
 ---
-
-## Notes
-
-- All hazard inputs (RIA, GLOF, LS) are optional  
-- The tool runs only the hazards provided  
-- A composite Multi-Hazard EI is generated only when **two or more hazards** are included  
-
+ 
+## General Notes
+ 
+- All hazard inputs (RIA, GLOF, LS) are optional — the tool runs only the hazards provided
+- A composite Multi-Hazard EI is generated only when **two or more hazards** are active
+- DEM and AOI rasters are automatically reprojected to a meter-based UTM CRS if needed
+ 
 ---
-
-## Workflow of ArcGIS Toolbox Version
-
+ 
+## Workflow — ArcGIS Toolbox Version
+ 
 ### Inputs
-
+ 
 | Parameter | Type | Required | Default | Description |
 |-----------|------|----------|---------|-------------|
 | DEM | Raster | Yes | — | Digital Elevation Model. |
@@ -129,31 +100,27 @@ This version provides a GUI-based solution fully integrated within the ArcGIS en
 | Output Folder | Folder | Yes | — | Directory to save output rasters and temporary files. |
 | Tana RIA | Float | Optional | 0.10 | Fahrböschung tangent for RIA runout stopping criterion. |
 | Tana GLOF | Float | Optional | 0.05 | Fahrböschung tangent for GLOF runout stopping criterion. |
-| Tana LS | Float | Optional | 0.19 | Fahrböschung tangent for landslide runout stopping criterion. |
+| Tana LS | Float | Optional | 0.19 | Fahrböschung tangent for LS runout stopping criterion. |
 | BFS max neighbours | Integer | Optional | 2 | Number of steepest downslope neighbours followed by BFS spread at each D8 node. Higher values produce wider lateral spread. Applied to all three hazard models. |
-| Min patch pixels RIA | Integer | Optional | 22 | Minimum contiguous patch size (in pixels) for RIA AOI. Patches smaller than this threshold are removed before simulation. Default based on 30 m DEM. |
-| Min patch pixels LS | Integer | Optional | 4 | Minimum contiguous patch size (in pixels) for LS AOI. Patches smaller than this threshold are removed before simulation. Default based on 30 m DEM. |
-
-> **Note:** The DEM and AOI rasters are automatically reprojected to a meter-based UTM CRS if needed. Flow direction is computed internally — no pre-computed flow direction input is required.  
+| Min patch pixels RIA | Integer | Optional | 22 | Minimum contiguous patch size (pixels) for RIA AOI. Patches below this threshold are removed before simulation. Default based on 30 m DEM. |
+| Min patch pixels LS | Integer | Optional | 4 | Minimum contiguous patch size (pixels) for LS AOI. Patches below this threshold are removed before simulation. Default based on 30 m DEM. |
+ 
+> **Note:** Flow direction is computed internally — no pre-computed flow direction input is required.  
 > **Note:** At least one AOI input must be provided.  
-> **Expected run time:** Varies by study area size and number of source pixels. RIA and LS simulations are the most computationally intensive steps due to the large number of seed pixels.
-
----
-
+> **Expected run time:** Varies by study area size and number of source pixels. RIA and LS are the most computationally intensive steps.
+ 
 ### Outputs
-
-| Output | Type | Description |
-|--------|------|-------------|
-| `RIA_EI.tif` | Raster | Normalized RIA Exposure Index (0–1). |
-| `GLOF_EI.tif` | Raster | Normalized GLOF Exposure Index (0–1). |
-| `LS_EI.tif` | Raster | Normalized Landslide Exposure Index (0–1). |
-| `Multi_EI.tif` | Raster | Normalized composite Exposure Index — sum of active hazard EIs, re-normalized to 0–1. Only generated when ≥2 hazards are active. |
-| `MH_temp/` | Folder | Intermediate files. Can be deleted after a successful run. |
-
----
-
-### Workflow
-
+ 
+| Output | Description |
+|--------|-------------|
+| `RIA_EI.tif` | Normalized RIA Exposure Index (0–1). |
+| `GLOF_EI.tif` | Normalized GLOF Exposure Index (0–1). |
+| `LS_EI.tif` | Normalized Landslide Exposure Index (0–1). |
+| `Multi_EI.tif` | Normalized composite EI — sum of active hazard EIs, re-normalized to 0–1. Only generated when ≥2 hazards are active. |
+| `MH_temp/` | Intermediate files. Can be deleted after a successful run. |
+ 
+### Steps
+ 
 1. Prepare a DEM and at least one AOI raster covering the study area.
 2. Set the output folder and optionally adjust **Tana**, **BFS max neighbours**, **Min patch pixels RIA**, and **Min patch pixels LS**.
 3. Run the tool:
@@ -163,76 +130,63 @@ This version provides a GUI-based solution fully integrated within the ArcGIS en
    - **PART 3** — Each active hazard model is run independently. For RIA and LS, small AOI patches are removed before simulation; LS additionally excludes pixels overlapping the RIA AOI. Each seed pixel (or lake outlet for GLOF) initiates a D8 walk downstream; at each D8 node, BFS spreads laterally to the steepest downslope neighbours, inheriting the node's path length.
    - **PART 4** — EI rasters are normalized and saved. Multi-hazard EI is computed if ≥2 hazards are active.
 4. Collect output rasters from the output folder.
-
+ 
 > **Note:** Requires the **Spatial Analyst** extension and the `scipy` Python package in ArcGIS Pro.
-
+ 
 ---
-
-## Workflow of Google Colab Version
-
-### Requirements
-
-- Google account  
-- Google Drive (for storing input and output files)  
-- No local installation required  
-
+ 
+## Workflow — Google Colab Version
+ 
 ### Setup
-
-1. Upload all input raster files (`.tif`) to your Google Drive.
-2. Open the YANSIM Colab notebook (`YANSIM_v1.0_Colab.ipynb`) in [Google Colab](https://colab.research.google.com).
-3. Set the runtime to **CPU** (*Runtime → Change runtime type → CPU*). GPU and TPU are not required and will not improve performance.
-
+ 
+1. Upload all input `.tif` files to your Google Drive.
+2. Open `YANSIM v1.0.ipynb` in [Google Colab](https://colab.research.google.com).
+3. Set the runtime to **CPU**: *Runtime → Change runtime type → CPU*. GPU and TPU are not required and will not improve performance.
+ 
 ### Inputs
-
-Same parameters as the ArcGIS Toolbox Version. See the [Inputs](#inputs) table above.
-
+ 
+Same parameters as the ArcGIS Toolbox Version — see the Inputs table above.
+ 
 ### Steps
-
+ 
 1. **Cell 1 — Install dependencies:** Installs `numba`, `rasterio`, `pysheds`, `scipy`, and `folium` automatically.
-2. **Cell 2 — Mount Google Drive:**
-   ```python
-   from google.colab import drive
-   drive.mount('/content/drive')
-   ```
-3. **Cell 3 — Set parameters:** Edit file paths and model parameters directly in the cell:
+2. **Cell 2 — Mount Google Drive:** Authorise Colab to access your Drive.
+3. **Cell 3 — Set parameters:** Edit file paths and model parameters:
    ```python
    DEM_PATH  = '/content/drive/MyDrive/your_folder/dem.tif'
    RIA_PATH  = '/content/drive/MyDrive/your_folder/ria_prone.tif'  # None if not used
-   GLOF_PATH = None
+   GLOF_PATH = '/content/drive/MyDrive/your_folder/glof_prone.tif'  # None if not used
    LS_PATH   = '/content/drive/MyDrive/your_folder/ls_prone.tif'   # None if not used
    OUT_DIR   = '/content/drive/MyDrive/your_folder/output'
    ```
 4. **Cell 4 — Load model code:** Loads all Numba-JIT compiled kernels. No edits needed.
 5. **Cell 5 — DEM preprocessing:** Reprojects DEM to UTM if in geographic CRS, then runs fill sinks and flow direction via `pysheds`.
 6. **Cell 6 — Read AOI rasters:** Loads and reprojects all AOI rasters to match the DEM grid exactly.
-7. **Cell 7 — Run models:** Runs RIA, GLOF, and LS independently. The first call includes ~30 seconds of Numba JIT compilation time.
+7. **Cell 7 — Run models:** Runs RIA, GLOF, and LS independently. 
 8. **Cell 8 — Save outputs:** Normalizes and saves EI rasters to `OUT_DIR` on Google Drive.
 9. **Cell 9 — Visualize:** Displays results interactively on a Google Satellite basemap using `folium`. Each hazard EI layer can be toggled on/off independently. A colour ramp from green (low) to red (high) indicates relative exposure.
-
+ 
 ### Outputs
-
-Same as the ArcGIS Toolbox Version. Output files are saved directly to the specified Google Drive folder.
-
-### Notes
-
-> **Note:** The first time a model runs, Numba JIT compilation adds approximately 30 seconds. Subsequent runs within the same session are faster.  
-> **Note:** Free-tier Colab sessions may disconnect after extended periods. For large study areas, consider upgrading to Colab Pro to access faster CPUs and longer session times.  
-> **Note:** Output rasters are saved directly to Google Drive and remain accessible after the session ends.
-
+ 
+Same as the ArcGIS Toolbox Version. Files are saved directly to the specified Google Drive folder and remain accessible after the session ends.
+ 
+> **Note:** The first time a model runs, Numba JIT compilation adds approximately 30 seconds.  
+> **Note:** Free-tier Colab sessions may disconnect after extended periods. For large study areas, consider **Colab Pro** for faster CPUs and longer session times.
+ 
 ---
-
-### Tana Parameter Guide
-
+ 
+## Tana Parameter Guide
+ 
 `Tana` is the tangent of the Fahrböschung travel angle. A smaller value allows longer runout; a larger value stops the flow earlier.
-
+ 
 | Hazard | Default Tana | Approx. angle | Reference |
-|--------|-------------|---------------|-----------|
-| RIA | 0.10 | 6° | Typical long-runout avalanche/debris flow |
-| GLOF | 0.05 | 3° | Typical long-runout flood flow |
-| LS | 0.19 | 11° | Typical long-runout landslides/debris flow |
-
+|--------|:-----------:|:-------------:|-----------|
+| RIA | 0.10 | ~6° | Typical long-runout avalanche / debris flow |
+| GLOF | 0.05 | ~3° | Typical long-runout glacial outburst flood |
+| LS | 0.19 | ~11° | Typical long-runout landslide / debris flow |
+ 
 ---
-
+ 
 ## License
-
+ 
 See the [LICENSE](LICENSE) file for full terms.
