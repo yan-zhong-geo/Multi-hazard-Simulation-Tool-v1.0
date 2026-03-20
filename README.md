@@ -14,6 +14,11 @@
 - Rock-Ice Avalanches (RIA)
 - Glacial Lake Outburst Floods (GLOF)
 - Landslides (LS)
+
+This model accompanies the paper:  
+> Zhong, Y., Allen, S., … Stoffel, M. (2026). *YANSIM v1.0: A Multi-Hazard Simulation Framework for Regional-Scale Exposure Assessment of Infrastructure to Mass Movement Hazards in High Mountain Regions*  
+
+Please cite this publication when using the model.
  
 ### 1.1 Path Model
  
