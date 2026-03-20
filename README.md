@@ -155,7 +155,7 @@ Same parameters as the ArcGIS Toolbox Version — see the Inputs table above.
    ```python
    DEM_PATH  = '/content/drive/MyDrive/your_folder/dem.tif'
    RIA_PATH  = '/content/drive/MyDrive/your_folder/ria_prone.tif'  # None if not used
-   GLOF_PATH = '/content/drive/MyDrive/your_folder/glof_prone.tif'  # None if not used
+   GLOF_PATH = '/content/drive/MyDrive/your_folder/lakes.tif'  # None if not used
    LS_PATH   = '/content/drive/MyDrive/your_folder/ls_prone.tif'   # None if not used
    OUT_DIR   = '/content/drive/MyDrive/your_folder/output'
    ```
