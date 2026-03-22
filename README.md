@@ -29,7 +29,7 @@ Each hazard is simulated using a unified **three-step D8 + BFS path model**. For
 3. **Nearest D8 node assignment** — each pixel in the BFS extent is assigned the EI value of its nearest D8 node (Euclidean pixel distance). EI decays quadratically from seed/outlet to end of reach:
 
 ```math
-EI = weight × (1 − path_len / total_len)²
+EI = weight \times \left(1 - \frac{\mathit{path\_len}}{\mathit{total\_len}}\right)^2
 ```
 
 where `weight = 1.0` for RIA and LS, and `weight = sqrt(log(lake_size + 1))` for GLOF.
