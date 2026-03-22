@@ -32,7 +32,10 @@ Each hazard is simulated using a unified **three-step D8 + BFS path model**. For
 EI = weight \times \left(1 - \frac{\mathit{path\_len}}{\mathit{total\_len}}\right)^2
 ```
 
-where `weight = 1.0` for RIA and LS, and `weight = sqrt(log(lake_size + 1))` for GLOF.
+where `weight = 1.0` for RIA and LS, and `weight = sqrt(log(lake_size + 1))` for GLOF. 
+
+<img width="1146" height="456" alt="image" src="https://github.com/user-attachments/assets/1d9842d4-6276-49fe-9112-9f1baaa6de20" />
+
 
 This design ensures that slope termination and EI decay are always based on true flow-path distance, correctly navigating flat terrain, glaciers, and valley floors without premature path truncation. The separation of BFS (extent) from D8 (values) ensures that lateral spread pixels inherit spatially accurate EI values rather than artificially uniform ones.
 
@@ -64,7 +67,10 @@ Each glacial lake is a seed. The outlet pixel (lowest elevation within a dilated
 EI = \sqrt{\ln(lake\_size + 1)} \times \left(1 - \frac{path\_len}{total\_len}\right)^2
 ```
 
-Each lake's contribution is summed across all lakes before final normalisation. The `sqrt(log(...))` weighting compresses the difference between large and small lakes while preserving their relative ordering.
+Each lake's contribution is summed across all lakes before final normalisation. The `sqrt(log(...))` weighting compresses the difference between large and small lakes while preserving their relative ordering. 
+
+<img width="1145" height="442" alt="image" src="https://github.com/user-attachments/assets/1a09ca08-d300-43c4-bccf-d7d013cd9c23" />
+
 
 #### 1.2.3 Landslide (LS)
 
