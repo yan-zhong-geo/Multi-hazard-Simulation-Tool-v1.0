@@ -34,7 +34,9 @@ EI = weight \times \left(1 - \frac{\mathit{path\_len}}{\mathit{total\_len}}\righ
 
 where `weight = 1.0` for RIA and LS, and `weight = sqrt(log(lake_size + 1))` for GLOF. 
 
-<img width="1146" height="486" alt="image" src="https://github.com/user-attachments/assets/94bb9c9b-4afd-47fb-8f6d-0f04934b7f13" />
+<p align="center">
+<img width="480" height="480" alt="image" src="https://github.com/user-attachments/assets/fac50575-eea5-43cf-97e3-2b3b7f551831" />
+</p>
 
 This design ensures that slope termination and EI decay are always based on true flow-path distance, correctly navigating flat terrain, glaciers, and valley floors without premature path truncation. The separation of BFS (extent) from D8 (values) ensures that lateral spread pixels inherit spatially accurate EI values rather than artificially uniform ones.
 
@@ -68,7 +70,9 @@ EI = \sqrt{\ln(lake\_size + 1)} \times \left(1 - \frac{path\_len}{total\_len}\ri
 
 Each lake's contribution is summed across all lakes before final normalisation. The `sqrt(log(...))` weighting compresses the difference between large and small lakes while preserving their relative ordering. 
 
-<img width="1146" height="485" alt="image" src="https://github.com/user-attachments/assets/07ca681d-687e-4949-a6d2-a62c7aa46de4" />
+<p align="center">
+<img width="480" height="480" alt="image" src="https://github.com/user-attachments/assets/9568a5e5-3ac6-4361-940d-16317e0de351" />
+</p>
 
 #### 1.2.3 Landslide (LS)
 
