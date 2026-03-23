@@ -151,13 +151,17 @@ User-friendly Graphical User Interface (GUI) with no coding or GIS software requ
 > **Expected run time:** Varies by study area size and number of source pixels. RIA and LS are the most computationally intensive steps.
  
 ### 4.2 Outputs
- 
+
 | Output | Description |
 |--------|-------------|
 | `RIA_EI.tif` | Normalized RIA Exposure Index (0–1). |
+| `RIA_EI_raw.tif` | Raw (un-normalized) RIA Exposure Index. |
 | `GLOF_EI.tif` | Normalized GLOF Exposure Index (0–1). |
+| `GLOF_EI_raw.tif` | Raw (un-normalized) GLOF Exposure Index. |
 | `LS_EI.tif` | Normalized Landslide Exposure Index (0–1). |
-| `Multi_EI.tif` | Normalized composite EI — sum of active hazard EIs, re-normalized to 0–1. Only generated when ≥2 hazards are active. |
+| `LS_EI_raw.tif` | Raw (un-normalized) Landslide Exposure Index. |
+| `Multi_EI.tif` | Normalized composite EI — sum of active normalized hazard EIs, re-normalized to 0–1. Only generated when ≥2 hazards are active. |
+| `Multi_EI_raw.tif` | Raw composite EI — sum of active normalized hazard EIs before final re-normalization. Preserves relative magnitudes for cross-watershed comparison. Only generated when ≥2 hazards are active. |
 | `MH_temp/` | Intermediate files. Can be deleted after a successful run. |
  
 ### 4.3 Steps
