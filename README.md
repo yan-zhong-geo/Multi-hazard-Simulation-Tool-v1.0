@@ -91,8 +91,8 @@ YANSIM is currently available in **three different implementations**, designed f
 | Version | Platform | Best for | Status |
 |---------|----------|----------|--------|
 | ArcGIS Toolbox | ArcGIS Pro · Windows | GIS users | Released |
-| Google Colab | Browser · Google Drive | Python users | Released |
-| YANSIM Desktop | Windows standalone | Non-technical users | Under development |
+| Google Colab | Browser · Google Drive | Python users | Under development |
+| MULTI.SIM Desktop | Windows standalone | Non-technical users | Under development |
 
 > This recommendation is indicative. The actual applicability and computational speed depend on the pixel counts in the RIA AOI and LS AOI, as well as the number of lakes. Typically, within a single study area: Number of RIA AOI pixels > Number of LS AOI pixels > Number of lakes.
 
